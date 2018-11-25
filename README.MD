@@ -1,0 +1,1 @@
+This is a simple web app designed to bring people and businesses together; users can register, login, make business reviews, and register businesses.
