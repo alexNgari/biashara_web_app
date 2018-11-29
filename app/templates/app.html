@@ -5,14 +5,113 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ title }} - App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='app.css') }}" />
-    <script src="main.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='app.css')}}" />
+    <style>
+        #view{
+            background-image: url(https://webrfree.com/wp-content/uploads/2018/09/Dark_Abstract_5121052.jpg);
+            background-repeat: no-repeat; 
+            background-size: cover;
+            background-position: center center;
+            width: 100%;
+            height: 100%;
+            display: table;
+            position: absolute;
+            z-index: 1;
+        }
+
+        #about{
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            opacity: 40%;
+        }
+
+        #main-div{
+            background-color: gray;
+            width: 60%;
+            text-align: center;
+            opacity: 10%;
+            vertical-align: middle;
+            margin: auto;
+        }
+
+        #login{
+            background-color: gray;
+            color: black;
+            width: 60%;
+            text-align: center;
+            opacity: 10%;
+            vertical-align: middle;
+            margin: auto;
+            position: relative;
+            z-index: 100;
+        }
+        #wrongPass{
+            color: red;
+            font-style: italic;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
 </head>
 <body>
-    <h1>{{ application.heading }}</h1>
-    <p>{{ application.body }}</p>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="{{url_for('home')}}">Biashara</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                <a class="nav-link" href="{{url_for('home')}}">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
 
-    <p>{{ username }} {{ password }}</p>
-
+            <p id="wrongPass">{{wrongPass}}</p>
+            <button class="btn btn-outline-success my-2 my-sm-0" data-target="#login" data-toggle="collapse">Log in</button>
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('sign_up')}}" role="button">Sign up</a>
+        </nav>
+    </div>
+    <div id="view">
+        <div id="about">
+            <div id="main-div">
+                <h1>About:</h1>
+                <p>
+                    Biashara is a web app designed to bring businesses together with customers. It will get you to what you want, be it services or customers.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="login" class="collapse">
+        <h2>User Login</h2>
+        <p>Please enter your username and password</p>
+        <form id="Login" action="/log_in" method="POST">
+    
+            <div class="form-group">
+    
+                <input type="username" class="form-control" name="username" placeholder="Username">
+    
+            </div>
+    
+            <div class="form-group">
+    
+                <input type="password" class="form-control" name="password" placeholder="Password">
+    
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+    
+        </form>
+    </div>
 </body>
 </html>

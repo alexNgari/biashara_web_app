@@ -1,5 +1,5 @@
-#view{
-    background-image: url(https://webrfree.com/wp-content/uploads/2018/09/Dark_Abstract_5121052.jpg);
+.bigdiv{
+    background-image: url(https://visualcocaine.org/public/uploads/large/191511256290ov9fgas45ukgfuryawyakt6eszto1y7tkiuwnistlidexry2xmucybhktxuw6bkehrvvaidq52qxv9jmdqtmxgjwq0jkzj6gjuxo.jpg);
     background-repeat: no-repeat; 
     background-size: cover;
     background-position: center center;
@@ -7,23 +7,23 @@
     height: 100%;
     display: table;
     position: absolute;
-    z-index: 1;
 }
 
-#about{
+.middiv{
     display: table-cell;
     vertical-align: middle;
     text-align: center;
     opacity: 40%;
 }
 
-#main-div{
+.maindiv{
     background-color: gray;
     width: 60%;
     text-align: center;
     opacity: 10%;
     vertical-align: middle;
     margin: auto;
+    border-radius: 3px;
 }
 
 #login{

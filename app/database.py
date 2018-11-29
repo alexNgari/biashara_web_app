@@ -1,4 +1,4 @@
-import pymysql, hashlib, binascii
+import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class Database:
@@ -16,21 +16,30 @@ class Database:
         hashed_pass = generate_password_hash(password)
         query = f"""INSERT INTO users (first_name, middle_name, last_name, email, username, password) 
                     VALUES ('{first_name}', '{middle_name}', '{last_name}', '{email}', '{username}', '{hashed_pass}')"""
-        print(query)
         self.cursor.execute(query)
         self.connection.commit()
 
-
-    def log_in(self, username, password):
+    
+    def check_username(self, username):
         query = f'''SELECT * FROM users WHERE username="{username}"'''
         self.cursor.execute(query)
-        rows = self.cursor.fetchall()
-        print(rows)
+        rows=self.cursor.fetchall()
+        return rows
+
+    def log_in(self, username, password):
+        rows = self.check_username(username)
         if len(rows) == 1:
             return check_password_hash(rows[0]['password'], password)
         else:
             return False
  
+
+    def register_business(self, name, description, location, created_by, logo_path=''):
+        query = f'''INSERT INTO businesses (business_name, description, location, created_by, logo_path) 
+                    VALUES ('{name}', '{description}', '{location}', '{created_by}', '{logo_path}')'''
+        self.cursor.execute(query)
+        self.connection.commit()
+
 
     def test(self):
         self.cursor.execute('SELECT user_name, password FROM users')

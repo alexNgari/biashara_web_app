@@ -5,15 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Biashara | login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='login.css') }}" />
     <script src="main.js"></script>
 </head>
-<body>
-    <form action="/log_in" method="POST">
-        <p><input type="username" name="username" placeholder="username"></p>
-        <p><input type="password" name="password" placeholder="password"></p>
-        <button class="btn btn-primary" type="submit">Log In</button>>
-    </form>
-</body>
+<body id="LoginForm">
+        <div class="container">
+        <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+           <h2>User Login</h2>
+           <p>Please enter your username and password</p>
+           </div>
+            <form id="Login" action="/log_in" method="POST">
+        
+                <div class="form-group">
+        
+                    <input type="username" class="form-control" name="username" placeholder="Username">
+        
+                </div>
+        
+                <div class="form-group">
+        
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+        
+                </div>
+                <div class="forgot">
+                <a href="reset.html"></a>
+        </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+        
+            </form>
+            </div>
+        </div></div></div>
+        
+        
+        </body>
 </html>
