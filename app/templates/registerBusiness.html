@@ -7,18 +7,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='signup.css')}}"/>
     <script src="main.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div>
-            <div>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="{{url_for('landing', username=username)}}">{{ username }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    My Businesses
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('logout')}}" role="button">Log out</a>
+            </div>
+        </nav>
+    </div>
+    <div class="bigdiv">
+        <div class="middiv">
+            <div class="maindiv">
                 <form action="{{url_for('register_business', username=username)}}" method="POST">
-                    <input type="text" name="name" placeholder="business name">
-                    <input type="text" name=location placeholder="location">
-                    <input type="text" name="description" placeholder="Type a short description of your business here">
+                    <div class="form-group row">
+                        <label for="first_name" class="col-sm-2 col-form-label">Business Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" placeholder="business name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="first_name" class="col-sm-2 col-form-label">Category</label>
+                        <div class="col-sm-9">
+                            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="category" required>
+                                <option selected value="">Choose...</option>
+                                <option value="Tech">Tech</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Craft">Craft</option>
+                                <option value="Service">Service</option>
+                            </select>
+                            <div class="invalid-feedback">Invalid Category</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="first_name" class="col-sm-2 col-form-label">Location</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name=location placeholder="location" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="first_name" class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <textarea name="description" class="form-control" placeholder="type a short description here" required rows="4"></textarea>
+                        </div>
+                    </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="alert alert-info">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
     </div>

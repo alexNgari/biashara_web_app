@@ -1,5 +1,6 @@
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 class Database:
     def __init__(self):
@@ -34,9 +35,9 @@ class Database:
             return False
  
 
-    def register_business(self, name, description, location, created_by, logo_path=''):
-        query = f'''INSERT INTO businesses (business_name, description, location, created_by, logo_path) 
-                    VALUES ('{name}', '{description}', '{location}', '{created_by}', '{logo_path}')'''
+    def register_business(self, name, category, description, location, created_by, logo_path=''):
+        query = f'''INSERT INTO businesses (business_name, category, description, location, created_by, logo_path) 
+                    VALUES ('{name}', '{category}', '{description}', '{location}', '{created_by}', '{logo_path}')'''
         self.cursor.execute(query)
         self.connection.commit()
 
@@ -47,3 +48,38 @@ class Database:
         username = row['user_name']
         password = row['password']
         return username, password
+
+    
+    def search_business(self, keyword_type, keyword):
+        query = f'''SELECT * FROM businesses WHERE {keyword_type}="{keyword}"'''
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return rows
+
+    def search_business_names(self, keyword_type, keyword):
+        rows = self.search_business(keyword_type, keyword)
+        names = []
+        for item in rows:
+            names.append(item['business_name'])
+        return names
+
+
+    def all_business_names(self):
+        query = "SELECT (business_name) FROM businesses"
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return rows
+
+    
+    def delete_business(self, business_name):
+        query = f'''DELETE FROM businesses WHERE business_name="{business_name}"'''
+        self.cursor.execute(query)
+        self.connection.commit()
+
+class User(UserMixin):
+    def __init__(self, username):
+        self.username = username
+
+    def get_id(self):
+        return self.username
+
