@@ -1,12 +1,24 @@
 # app/__init__.py
 
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+
 
 # Initialize the app
-app = Flask(__name__, instance_relative_config=True)
+app = Flask(__name__)
 
-# Load the views
-from app import views
+#login manager
+login = LoginManager(app)
 
 # Load the config file
 app.config.from_object('config')
+
+#sqlalchemy stuff
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+#load views and database models
+from app import routes, models
+

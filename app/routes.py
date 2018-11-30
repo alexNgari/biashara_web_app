@@ -1,33 +1,13 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, g, session
-from app.database import Database, User
-from app import app
-from flask_login import LoginManager, login_required, logout_user, login_user
+from app import app, login, db
+from flask_login import LoginManager, login_required, logout_user, login_user, current_user
+from app.models import User, Business
 
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-@login_manager.user_loader
-def load_user(user_id):
-    db = Database()
-    if len(db.check_username(user_id)) == 1:
-        return User(user_id)
-    else:
-        return None
 
 @app.route('/')
 def home():
+    print(current_user)
     return render_template('app.html')
-
-
-# @app.route('/home')
-# def home():
-#     db = Database()
-#     username, password = db.test()
-
-#     title = 'Mokoso'
-#     application = {'heading':'Andela Code Camp Flask Session', 'body': 'Lorem Ipsum blah blah blah'}
-#     return render_template('app.html', title = title, application = application, username = username, password = password)
 
 
 @app.route('/sign_up', methods = ['GET', 'POST'])
@@ -41,9 +21,12 @@ def sign_up():
             username = request.form['username']
             password = request.form['password']
 
-            db = Database()
-            if len(db.check_username(username)) == 0:
-                db.sign_up(first_name, middle_name, last_name, email, username, password)
+            user = User.query.filter_by(username=username).first()
+            if user is None:
+                user = User(first_name=first_name, middle_name=middle_name, last_name=last_name, username=username, email=email)
+                user.set_password(password)
+                db.session.add(user)
+                db.session.commit()
                 flash('Sign-up Successful. Click login above to log in')
                 return render_template('signup.html')
             else:
@@ -54,18 +37,18 @@ def sign_up():
         return render_template('signup.html')
 
 
-@app.route('/log_in', methods = ['POST'])
-def log_in():
+@app.route('/login', methods = ['POST'])
+def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = Database()
-        user = User(username)
-        if db.log_in(username, password):
+        user = User.query.filter_by(username=username).first()
+        print(user)
+        if user is None or not user.check_password(password):
+            return render_template('app.html', wrongPass="Wrong username or password")
+        else:
             login_user(user)
             return redirect(url_for('landing', username=username))
-        else:
-            return render_template('app.html', wrongPass="Wrong username or password")
 
 
 @app.route('/register_business/<username>', methods = ['GET', 'POST'])
@@ -78,11 +61,11 @@ def register_business(username):
         location = request.form['location']
         created_by = username
 
-        db = Database()
-        db.register_business(name, category, description, location, created_by)
+        business = Business(name=name, category=category, desctiption=description, location=location, user_id=current_user.id)
+        db.session.add(business)
+        db.session.commit()
         flash("The business has been successfully registered")
         return render_template('registerBusiness.html', username=username)
-
     session.pop('_flashes', None)
     return render_template('registerBusiness.html', username=username)
 
@@ -96,11 +79,10 @@ def logout():
 @app.route('/landing/<string:username>')
 @login_required
 def landing(username):
-    db = Database()
-    rows = db.all_business_names()
+    rows = Business.query.filter_by(user_id=current_user.id).all()
     names=[]
     for row in rows:
-        names.append(row['business_name'])
+        names.append(row.name)
     if len(rows) == 0:
         flash('No results found')
     return render_template('landing.html', username=username, names=names)
@@ -113,21 +95,21 @@ def search_business():
         keyword_type=request.args.get('keyword_type', None)
         keyword=request.args.get('keyword', None)
 
-        db = Database()
-        rows = db.search_business_names(keyword_type, keyword)
+        rows = Business.query.filter_by(keyword_type=keyword).all()
         if len(rows) == 0:
             flash('No results found')
             return render_template('landing.html')
         
         else:
+            names = []
+            for row in rows:
+                names.append(row.name)
             return render_template('landing.html', names=rows)
 
 @app.route('/business/<string:business_name>', methods=['GET'])
 def business(business_name):
     if request.method == 'GET':
-        db = Database()
-        rows = db.search_business('business_name', business_name)
-        business = rows.pop(0)
+        business = Business.query.filter_by(name=business_name).first()
         return render_template('business.html', business=business)
 
 
@@ -135,7 +117,8 @@ def business(business_name):
 @login_required
 def delete_business():
     business_name = request.form['business_name']
-    db=Database()
-    db.delete_business(business_name)
+    business = Business.query.filter_by(name=business_name).first()
+    db.session.delete(business)
+    db.session.commit()
     flash('Successfully deleted business')
     return render_template('business.html', business=None)
