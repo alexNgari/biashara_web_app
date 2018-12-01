@@ -76,6 +76,20 @@ class Database:
         self.cursor.execute(query)
         self.connection.commit()
 
+
+    def my_businesses(self, username):
+        query = f'''SELECT (business_name) FROM businesses WHERE created_by="{username}"'''
+        self.cursor.execute(query)
+        rows=self.cursor.fetchall()
+        return rows
+
+
+    def update_business(self, old_name, name, category, description, location, logo_path=''):
+        query = f'''UPDATE businesses SET business_name='{name}', category='{category}', description='{description}', 
+                    location='{location}', created_by, logo_path='{logo_path}' WHERE business_name="{old_name}"'''
+        self.cursor.execute(query)
+        self.connection.commit()
+
 class User(UserMixin):
     def __init__(self, username):
         self.username = username

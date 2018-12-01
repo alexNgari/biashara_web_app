@@ -52,6 +52,15 @@
     </div>
     
     <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="alert alert-info">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
         {{business.business_name}}
         {{business.category}}
         {{business.location}}
@@ -59,16 +68,6 @@
         {{business.created_by}}
 
         <button class="btn btn-danger my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Delete Business</button>
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="alert alert-info">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
 
         <div id="delete" class="collapse">
             <h2>Are you sure?</h2>
@@ -80,6 +79,10 @@
 
             <button class="btn btn-success my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Cancel</button>
         </div>
+
+        <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('update_business', business_name=business.business_name)}}" 
+            role="button">Update details</a>
+        
     </div>
 </body>
 </html>
