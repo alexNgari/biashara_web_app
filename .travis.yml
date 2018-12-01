@@ -6,3 +6,5 @@ install:
 # command to run tests
 script:
   - nose
+
+  after_success: coveralls
