@@ -46,27 +46,29 @@
                 <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
             </ul>
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{{ url_for('register_business', username=username) }}" role="button">Register Business</a>
             <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('logout')}}" role="button">Log out</a>
         </nav>
     </div>
     
     <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="alert alert-info">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
         {{business.name}}
         {{business.category}}
         {{business.location}}
-        {{business.desctiption}}
-        {{business.user_id}}
+        {{business.description}}
+        <!-- {{created_by}} -->
 
         <button class="btn btn-danger my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Delete Business</button>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-info">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
         <div id="delete" class="collapse">
             <h2>Are you sure?</h2>
@@ -78,10 +80,6 @@
 
             <button class="btn btn-success my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Cancel</button>
         </div>
-
-        <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('update_business', business_name=business.business_name)}}" 
-            role="button">Update details</a>
-        
     </div>
 </body>
 </html>

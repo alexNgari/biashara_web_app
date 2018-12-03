@@ -52,17 +52,17 @@
                     <div class="form-group row">
                         <label for="first_name" class="col-sm-2 col-form-label">Business Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="name" placeholder="business name" value="{{business.business_name}}" required>
+                            <input type="text" class="form-control" name="name" placeholder="business name" value="{{business.name}}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="first_name" class="col-sm-2 col-form-label">Category</label>
                         <div class="col-sm-9">
                             <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="category" required>
-                                <option value="Tech">Tech</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Craft">Craft</option>
-                                <option value="Service">Service</option>
+                                <option value="Tech" selected="{{if business.category=='Tech' return 'selected'}}">Tech</option>
+                                <option value="Entertainment" value="Tech" selected="{{if business.category=='Entertainment' return 'selected'}}">Entertainment</option>
+                                <option value="Craft" value="Tech" selected="{{if business.category=='Craft'}}">Craft</option>
+                                <option value="Service" value="Tech" selected="{{if business.category=='Service' return 'selected'}}">Service</option>
                             </select>
                             <div class="invalid-feedback">Invalid Category</div>
                         </div>
@@ -70,13 +70,13 @@
                     <div class="form-group row">
                         <label for="first_name" class="col-sm-2 col-form-label">Location</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name=location placeholder="location" required>
+                            <input type="text" class="form-control" name=location placeholder="location" value="{{business.location}}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="first_name" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-9">
-                            <textarea name="description" class="form-control" placeholder="type a short description here" required rows="4"></textarea>
+                            <textarea name="description" class="form-control" placeholder="type a short description here" value="{{business.desctiption}}" required rows="4"></textarea>
                         </div>
                     </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
