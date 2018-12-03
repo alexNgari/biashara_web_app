@@ -80,14 +80,14 @@ def logout():
 @login_required
 def landing(username):
     my_rows = Business.query.filter_by(user_id=current_user.id).all()
-    businesses=[]
+    my_names=[]
     for row in my_rows:
-        businesses.append(row.name)
+        my_names.append(row.name)
     rows = Business.query.all()
     names = []
     for row in rows:
         names.append(row.name)
-    return render_template('landing.html', username=username, businesses=businesses, names=names)
+    return render_template('landing.html', username=username, my_names=my_names, names=names)
 
 
 @app.route('/search_business', methods=['GET'])
@@ -149,9 +149,19 @@ def delete_business():
     return render_template('business.html', business=None)
 
 
-@app.route('/update_business/<string:business_name>', methods = ['GET', 'POST'])
+@app.route('/update_business/<string:business_name>', methods = ['GET'])
 @login_required
 def update_business(business_name):
+    if request.method == 'GET':
+        session.pop('_flashes', None)
+        business_name = request.args.get('business_name', None)
+        business = Business.query.filter_by(name=business_name).first()
+        return render_template('update_business.html', business_name=business_name, business=business)
+
+
+@app.route('/update_business_submit', methods = ['POST'])
+@login_required
+def update_business_submit():
     if request.method == 'POST':
         name = request.form['name']
         category = request.form['category']
@@ -166,10 +176,4 @@ def update_business(business_name):
             business.location = location
             db.session.commit()
             flash('Details successfully updated')
-            return render_template('update_business.html')
-    else:
-        session.pop('_flashes', None)
-        business_name = request.args.get('business_name', None)
-        business = Business.query.filter_by(name=business_name).first()
-        return render_template('update_business.html', business_name="business_name", business=business)
-
+            return render_template('update_business.html', business=business)

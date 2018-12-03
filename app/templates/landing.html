@@ -62,8 +62,8 @@
                 My Businesses
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for business in businesses %}
-                    <a class="dropdown-item" href="{{url_for('business', business_name=business)}}">{{business}}</a>
+                {% for name in my_names %}
+                    <a class="dropdown-item" href="{{url_for('business', business_name=name)}}">{{name}}</a>
                 {% endfor %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
