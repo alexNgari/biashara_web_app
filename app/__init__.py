@@ -19,5 +19,5 @@ db.create_all()
 migrate = Migrate(app, db)
 
 #load views and database models
-from app import views, models, forms
+from app import views, models
 

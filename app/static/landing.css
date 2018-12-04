@@ -1,19 +1,27 @@
+
 #section1 {
     background: white;
     margin: auto;
+    display: grid;
+    height: 100%;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 50% 50%;
 }
 #left {
-    width: 80%;
+    padding: 10px;
     height: 100%;
     background: lightgray;
     float: left;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 #right {
-    margin-left: 15%;
     padding: 10px;
     padding-left: 10px;
     height: 100%;
     background: darkslategrey;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
 .names a{

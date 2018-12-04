@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='mbusiness.css')}}"/>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
@@ -18,70 +19,70 @@
 <body>
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{url_for('landing', username=username)}}">{{ username }}</a>
+            <a class="navbar-brand" href="{{url_for('landing', username=current_user.username)}}">{{ current_user.username }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-                </li>
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     My Businesses
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    {% for name in my_names %}
+                        <a class="dropdown-item" href="{{url_for('business', business_name=name)}}">{{name}}</a>
+                    {% endfor %}
                 </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
             </ul>
             <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('logout')}}" role="button">Log out</a>
         </nav>
     </div>
     
-    <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="alert alert-info">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
-        {{business.name}}
-        {{business.category}}
-        {{business.location}}
-        {{business.desctiption}}
-        {{business.user_id}}
+    <div id="maindiv">
+        <div id="business_profile">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-info">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+            <h2>{{business.name}}</h2>
+            <h4>Category: {{business.category}}</h4>
+            <h4> Location: {{business.location}}</h4>
+            <h4>Description</h4>
+            <p>{{business.desctiption}}</p> <br>
 
-        <button class="btn btn-danger my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Delete Business</button>
+            <button class="btn btn-danger my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Delete Business</button>
 
-        <div id="delete" class="collapse">
-            <h2>Are you sure?</h2>
-            <h3>Type the name of the business to confirm</h3>
-            <form action="{{url_for('delete_business')}}" method="POST">
-                <input class="form-control" type="text" name="business_name" placeholder="Business name">
-                <button class="btn btn-danger" type="submit">Delete</button>
-            </form>
+            <div id="delete" class="collapse">
+                <h2>Are you sure?</h2>
+                <h3>Type the name of the business to confirm</h3>
+                <form action="{{url_for('delete_business')}}" method="POST">
+                    <input class="form-control" type="text" name="business_name" placeholder="Business name">
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
 
-            <button class="btn btn-success my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Cancel</button>
+                <button class="btn btn-success my-2 my-sm-0" data-target="#delete" data-toggle="collapse">Cancel</button>
+            </div>
+
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('update_business', business_name=business.name)}}" 
+                role="button">Update details</a>
         </div>
-
-        <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('update_business', business_name=business.name)}}" 
-            role="button">Update details</a>
-        
+        <div id="reviews">
+            {% for review in reviews %}
+                <div>
+                    <strong>{{query.filter_by(id=review.user_id).first().username}}</strong>
+                    <p id="timestamp">{{review.pub_date}}</p>
+                    <p id="post">{{review.post}}</p> <br>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

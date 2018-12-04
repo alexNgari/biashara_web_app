@@ -2,6 +2,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from datetime import datetime
 
 
 @login.user_loader
@@ -51,4 +52,15 @@ class Business(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Business {}>'.format(self.body)
+
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    business_id = db.Column(db.Integer, db.ForeignKey('business.id'))
+    post = db.Column(db.String(512), index=True, unique=False, nullable=False)
+    pub_date= db.Column(db.DateTime, default=datetime.utcnow())
+
+    def __repr__(self):
+        return '<Review {}>'.format(self.body)

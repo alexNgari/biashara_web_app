@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, g, session
 from app import app, login, db
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
-from app.models import User, Business
+from app.models import User, Business, Review
 
 
 @app.route('/')
@@ -97,7 +97,13 @@ def search_business():
         keyword_type=request.args.get('keyword_type', None)
         keyword=request.args.get('keyword', None)
 
-        rows = Business.query.filter_by(keyword_type=keyword).all()
+        if keyword_type == 'business_name':
+            rows = Business.query.filter_by(name=keyword).all()
+        elif keyword_type == 'location':
+            rows = Business.query.filter_by(location=keyword).all()
+        else:
+            rows = Business.query.filter_by(category=keyword).all()
+            
         if len(rows) == 0:
             flash('No results found')
             return render_template('landing.html')
@@ -123,15 +129,27 @@ def business(business_name):
 @app.route('/mbusiness/<string:business_name>', methods=['GET'])
 def my_business(business_name):
     if request.method == 'GET':
+        my_rows = Business.query.filter_by(user_id=current_user.id).all()
+        my_names=[]
+        for row in my_rows:
+            my_names.append(row.name)
         business = Business.query.filter_by(name=business_name).first()
-        return render_template('mbusiness.html', business=business)
+        reviews = Review.query.filter_by(business_id=business.id).all()
+        query = User.query
+        return render_template('mbusiness.html', business=business, my_names=my_names, reviews=reviews, query=query)
 
 
 @app.route('/obusiness/<string:business_name>', methods=['GET'])
 def other_business(business_name):
     if request.method == 'GET':
+        my_rows = Business.query.filter_by(user_id=current_user.id).all()
+        my_names=[]
+        for row in my_rows:
+            my_names.append(row.name)
         business = Business.query.filter_by(name=business_name).first()
-        return render_template('obusiness.html', business=business)
+        reviews = Review.query.filter_by(business_id=business.id).all()
+        query = User.query
+        return render_template('obusiness.html', business=business, my_names=my_names, reviews=reviews, query=query)
 
 
 @app.route('/delete', methods=['POST'])
@@ -165,3 +183,21 @@ def update_business(business_name):
         session.pop('_flashes', None)
         business = Business.query.filter_by(name=business_name).first()
         return render_template('update_business.html', business=business)
+
+
+@app.route('/review/<string:business_name>', methods=['GET', 'POST'])
+@login_required
+def review_business(business_name):
+    if request.method == 'POST':
+        business = Business.query.filter_by(name=business_name).first()
+        post = request.form['post']
+
+        review = Review(user_id=current_user.id, business_id=business.id, post=post)
+        db.session.add(review)
+        db.session.commit()
+        flash('Review Posted')
+        return render_template('review.html', business=business)
+    else:
+        session.pop('_flashes', None)
+        business = Business.query.filter_by(name=business_name).first()
+        return render_template('review.html', business=business)

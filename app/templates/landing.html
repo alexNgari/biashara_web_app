@@ -8,32 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='landing.css')}}" />
-    <style>
-        #section1 {
-            background: white;
-            margin: auto;
-        }
-        #left {
-            width: 80%;
-            height: 100%;
-            background: lightgray;
-            float: left;
-        }
-        #right {
-            margin-left: 15%;
-            padding: 10px;
-            padding-left: 10px;
-            height: 100%;
-            background: darkslategrey;
-        }
-
-        .names a{
-            font-family: Arial, Helvetica, sans-serif;
-            font-weight: bold;
-            color: aliceblue;
-            font-size: 30px;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
@@ -51,12 +25,6 @@
     
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-            </li>
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 My Businesses
@@ -65,12 +33,7 @@
                 {% for name in my_names %}
                     <a class="dropdown-item" href="{{url_for('business', business_name=name)}}">{{name}}</a>
                 {% endfor %}
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
             </div>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
             </li>
         </ul>
         <a class="btn btn-outline-success my-2 my-sm-0" href="{{ url_for('register_business', username=username) }}" role="button">Register Business</a>
@@ -98,7 +61,7 @@
                 <h3>Search</h3>
                 <form id="search" action="{{url_for('search_business')}}" method="GET">
                     <div class="form-group">    
-                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="keyword_type" required>
+                        <select class="custom-select my-1 mr-sm-2" id="selectcat" name="keyword_type" required>
                             <option selected value="">Choose...</option>
                             <option value="business_name">Name</option>
                             <option value="location">Location</option>
