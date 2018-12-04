@@ -149,31 +149,19 @@ def delete_business():
     return render_template('business.html', business=None)
 
 
-@app.route('/update_business/<string:business_name>', methods = ['GET'])
+@app.route('/update_business/<string:business_name>', methods = ['GET', 'POST'])
 @login_required
 def update_business(business_name):
-    if request.method == 'GET':
-        session.pop('_flashes', None)
-        business_name = request.args.get('business_name', None)
-        business = Business.query.filter_by(name=business_name).first()
-        return render_template('update_business.html', business_name=business_name, business=business)
-
-
-@app.route('/update_business_submit', methods = ['POST'])
-@login_required
-def update_business_submit():
     if request.method == 'POST':
-        name = request.form['name']
-        category = request.form['category']
-        description = request.form['description']
-        location = request.form['location']
-
         business = Business.query.filter_by(name=business_name).first()
-        if business.user_id == current_user.id:
-            business.name = name
-            business.desctiption = description
-            business.category = category
-            business.location = location
-            db.session.commit()
-            flash('Details successfully updated')
-            return render_template('update_business.html', business=business)
+        business.name = request.form['name']
+        business.category = request.form['category']
+        business.desctiption = request.form['description']
+        business.location = request.form['location']
+        db.session.commit()
+        flash('Successfully updated details')
+        return render_template('update_business.html', business=business)
+    else:
+        session.pop('_flashes', None)
+        business = Business.query.filter_by(name=business_name).first()
+        return render_template('update_business.html', business=business)
