@@ -9,7 +9,7 @@ services:
 
 
 before_script:
-  - psql -c "CREATE DATABASE andelaap;" -U postgres
+  - psql -c "CREATE DATABASE andelaapp;" -U postgres
   - psql -c "ALTER USER postgres WITH PASSWORD '@Alex.ngari03';" -U postgres
 
 
