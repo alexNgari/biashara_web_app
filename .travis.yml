@@ -9,8 +9,8 @@ services:
 
 
 before_script:
-  - psql -c 'create database andelaap;' -U postgres
-  - cp database.yml.travis database.yml
+  - psql -c "CREATE DATABASE andelaap;" -U postgres
+  - psql -c "ALTER USER postgres WITH PASSWORD '@Alex.ngari03';" -U postgres
 
 
 # command to run tests
