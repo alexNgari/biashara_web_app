@@ -25,7 +25,7 @@ class FlaskTestCase(BaseTestCase):
     # Ensure flask works
     def test_home(self):
         response = self.client.get('/', content_type='html/text')
-        self.assertEqual(response.status_code, 200)
+        self.assert200
 
     # Check home page load
     def test_signup_load(self):
@@ -35,7 +35,7 @@ class FlaskTestCase(BaseTestCase):
     # Ensure login behaves correctly given correct credentials
     def test_correct_login(self):
         response = self.client.post('/login',
-                    data=dict(username='Bloomy', password='Bloomy'),
+                    data=dict(username='Bloomy', password='bloomy'),
                     follow_redirects=True)
         self.assertIn(b'Reviews', response.data)
 
@@ -51,7 +51,14 @@ class FlaskTestCase(BaseTestCase):
     # Ensure landing page requires login
     def test_landing_require_login(self):
         response = self.client.get('/landing/Bloomy')
-        self.assertEqual(response.status_code, 401)
+        self.assert401
+
+    # Ensure logout requires login
+    def test_logout_require_login(self):
+        response = self.client.get('/logout', follow_redirects=True)
+        self.assert401
+
+        
 
 
 if __name__ == '__main__':
