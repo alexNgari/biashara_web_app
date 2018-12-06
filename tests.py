@@ -1,4 +1,5 @@
-from app import app
+from app import app, db
+from app.models import User, Business, Review
 import unittest
 
 class FlaskTestCase(unittest.TestCase):
