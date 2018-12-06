@@ -3,6 +3,7 @@ from flask import Flask
 from flask_testing import TestCase
 from app import app, db
 from app.models import User, Business, Review
+from flask_login import current_user
 
 
 class BaseTestCase(TestCase):
@@ -32,14 +33,22 @@ class FlaskTestCase(BaseTestCase):
         response = self.client.get('/', content_type='html/text')
         self.assertTrue(b'Biashara is a web app' in response.data)
 
+        # Ensure logout requires login
+    def test_logout_require_login(self):
+        response = self.client.get('/logout', follow_redirects=True)
+        self.assert401
+
+        
+class UsersViewsTests(BaseTestCase):
     # Ensure login behaves correctly given correct credentials
     def test_correct_login(self):
-        response = self.client.post('/login',
-                    data=dict(username='Bloomy', password='bloomy'),
-                    follow_redirects=True)
-        self.assertIn(b'Reviews', response.data)
-
-
+        with self.client:
+            response = self.client.post('/login',
+                        data=dict(username='Bloomy', password='bloomy'),
+                        follow_redirects=True)
+            self.assertIn(b'Reviews', response.data)
+            self.assertTrue(current_user.username == 'Bloomy')
+            self.assertTrue(current_user.is_active)
 
     # Ensure login behaves correctly given wrong credentials    
     def test_incorrect_login(self):
@@ -53,12 +62,7 @@ class FlaskTestCase(BaseTestCase):
         response = self.client.get('/landing/Bloomy')
         self.assert401
 
-    # Ensure logout requires login
-    def test_logout_require_login(self):
-        response = self.client.get('/logout', follow_redirects=True)
-        self.assert401
 
-        
 
 
 if __name__ == '__main__':
