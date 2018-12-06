@@ -12,10 +12,10 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         db.create_all()
-        # user = User(first_name='Mikael', middle_name='Bloomberg', last_name='Bloomy', username='Bloomy', email='bloomy@mail.com')
-        # user.set_password('bloomy')
-        # db.session.add(user)
-        # db.session.commit()
+        user = User(first_name='Mikael', middle_name='Bloomberg', last_name='Bloomy', username='Bloomy', email='bloomy@mail.com')
+        user.set_password('bloomy')
+        db.session.add(user)
+        db.session.commit()
 
     def tearDown(self):
         db.session.remove()
@@ -35,13 +35,18 @@ class FlaskTestCase(BaseTestCase):
     # Ensure login behaves correctly given correct credentials
     def test_correct_login(self):
         response = self.client.post('/login',
-                    data=dict(username='Lmutu', password='Lmutu'),
+                    data=dict(username='Bloomy', password='Bloomy'),
                     follow_redirects=True)
         self.assertIn(b'Reviews', response.data)
 
 
 
     # Enssure login behaves correctly given wrong credentials    
+    def test_correct_login(self):
+        response = self.client.post('/login',
+                    data=dict(username='Lmutu', password='Lmutu'),
+                    follow_redirects=True)
+        self.assertIn(b'Wrong username or password', response.data)
 
 
 if __name__ == '__main__':
