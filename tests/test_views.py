@@ -1,3 +1,5 @@
+from flask_login import current_user
+
 def test_app(test_client):
     response = test_client.get('/')
     assert response.status_code == 200
@@ -6,10 +8,12 @@ def test_app(test_client):
 
 def test_login(test_client, init_database):
     # test login functionality
+    with test_client:
         response = test_client.post('/login',
                                     data=dict(username='Lmutu', password='Lmutu'),
                                     follow_redirects=True)
         assert response.status_code == 200
+        assert current_user.username == 'Lmutu'
         # assert b"Reviews" in response.data
         # assert b"Lmutu" in response.data
         # assert b"Register Business" in response.data
@@ -26,6 +30,6 @@ def test_login(test_client, init_database):
         # assert b"Log in" in response.data
         # assert b"Sign up" in response.data
 
-def test_logout(test_client, logged_in_user):
-    response = test_client.get('/logout', follow_redirects=True)
-    assert response.status_code == 200
+# def test_logout(test_client, logged_in_user):
+#     response = test_client.get('/logout', follow_redirects=True)
+#     assert response.status_code == 200
