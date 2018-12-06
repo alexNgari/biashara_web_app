@@ -10,11 +10,11 @@ def test_login_logout(test_client, init_database):
                                 data=dict(username='Lmutu', password='Lmutu'),
                                 follow_redirects=True)
     assert response.status_code == 200
-    assert b"Lmutu" in response.data
-    # assert b"Register Business" in response.data
-    # assert b"Choose" in response.data
-    # assert b"Log out" in response.data
-    # assert b"Log in" not in response.data
+    # assert b"Lmutu" in response.data
+    assert b"Register Business" in response.data
+    assert b"Choose" in response.data
+    assert b"Log out" in response.data
+    assert b"Log in" not in response.data
     
     # #########test logout functionality
     # response = test_client.get('/logout', follow_redirects=True)
