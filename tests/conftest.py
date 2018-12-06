@@ -1,5 +1,5 @@
 import pytest
-from app import app
+from app import app, db
 from app.models import User, Business, Review
 
 
@@ -31,3 +31,18 @@ def test_client():
     yield app_client
     ctx.pop()
 
+
+@pytest.fixture(scope='session')
+def init_database():
+    #create database and table
+    db.create_all()
+ 
+    # Insert user data
+    # user = User(first_name='Laurene', middle_name='Ngoya', last_name='Mutundu', username='Lmutu', email='lmutu@mail.com')
+    # user.set_password('Lmutu')
+    # db.session.add(user)
+    # db.session.commit()
+ 
+    yield db    #test
+ 
+    db.drop_all() # teardown
