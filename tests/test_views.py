@@ -1,11 +1,9 @@
-import pytest, pytest_timeout
-
 def test_app(test_client):
     response = test_client.get('/')
     assert response.status_code == 200
     assert b'Biashara' in response.data
 
-@pytest.mark.timeout(60)
+
 def test_login_logout(test_client, init_database):
     # test login functionality
     response = test_client.post('/login',
