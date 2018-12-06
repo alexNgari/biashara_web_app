@@ -11,7 +11,7 @@ app = Flask(__name__)
 login = LoginManager(app)
 
 # Load the config file
-app.config.from_object('config')
+app.config.from_object('config.DevelopmentConfig')
 
 #sqlalchemy stuff
 db = SQLAlchemy(app)
