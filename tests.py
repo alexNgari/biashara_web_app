@@ -41,12 +41,17 @@ class FlaskTestCase(BaseTestCase):
 
 
 
-    # Enssure login behaves correctly given wrong credentials    
-    def test_correct_login(self):
+    # Ensure login behaves correctly given wrong credentials    
+    def test_incorrect_login(self):
         response = self.client.post('/login',
                     data=dict(username='Lmutu', password='Lmutu'),
                     follow_redirects=True)
         self.assertIn(b'Wrong username or password', response.data)
+
+    # Ensure landing page requires login
+    def test_landing_require_login(self):
+        response = self.client.get('/landing/Bloomy')
+        self.assertEqual(response.status_code, 401)
 
 
 if __name__ == '__main__':
