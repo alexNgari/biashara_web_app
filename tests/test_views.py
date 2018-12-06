@@ -16,7 +16,7 @@ def test_login_logout(test_client, init_database):
     assert b"Log out" in response.data
     assert b"Log in" not in response.data
     
-    test logout functionality
+    #########test logout functionality
     response = test_client.get('/logout', follow_redirects=True)
     assert response.status_code == 200
     assert b"Biashara is a web app" in response.data

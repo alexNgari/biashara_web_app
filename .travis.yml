@@ -15,6 +15,6 @@ before_script:
 
 # command to run tests
 script:
-  - pytest -v
+  - pytest --cov
 
 after_success: coveralls
