@@ -1,6 +1,7 @@
 import pytest
 from app import app, db
 from app.models import User, Business, Review
+from flask_login import login_user, logout_user
 
 
 ################    MODELS  ####################
@@ -32,7 +33,7 @@ def test_client():
     ctx.pop()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def init_database():
     #create database and table
     db.create_all()
@@ -46,3 +47,8 @@ def init_database():
     yield db    #test
  
     db.drop_all() # teardown
+
+
+@pytest.fixture(scope='session')
+def logged_in_user(request, test_user):
+    flask_login.login_user(test_user)

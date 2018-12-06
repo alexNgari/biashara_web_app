@@ -3,5 +3,6 @@
   "tests/test_models.py::test_new_business",
   "tests/test_models.py::test_new_review",
   "tests/test_views.py::test_app",
-  "tests/test_views.py::test_login_logout"
+  "tests/test_views.py::test_login",
+  "tests/test_views.py::test_logout"
 ]
