@@ -3,7 +3,7 @@ from flask import Flask
 from flask_testing import TestCase
 from app import app, db
 from app.models import User, Business, Review
-from flask_login import current_user
+from flask_login import current_user, login_user, logout_user
 
 
 class BaseTestCase(TestCase):
@@ -16,6 +16,16 @@ class BaseTestCase(TestCase):
         user = User(first_name='Mikael', middle_name='Bloomberg', last_name='Bloomy', username='Bloomy', email='bloomy@mail.com')
         user.set_password('bloomy')
         db.session.add(user)
+        db.session.commit()
+        business = Business(name='testName1', category='testCat1', desctiption='testDesc1', location='Area 51', user_id=1)
+        db.session.add(business)
+        db.session.commit()
+        user2 = User(first_name='John', middle_name='Anderson', last_name='Wick', username='Wick', email='jwick@mail.com')
+        user2.set_password('jwick')
+        db.session.add(user2)
+        db.session.commit()
+        business2 = Business(name='testName2', category='testCat2', desctiption='testDesc2', location='Area 52', user_id=2)
+        db.session.add(business2)
         db.session.commit()
 
     def tearDown(self):
@@ -106,6 +116,15 @@ class UsersViewsTests(BaseTestCase):
                 follow_redirects=True)
             self.assertIn(b'Username has already been taken', response.data)
 
+    # Test register_business_page loads correctly
+    def test_register_business_page(self):
+        with self.client:
+            self.client.post('/login', data=dict(username='Bloomy', password='bloomy')) # log in user
+            response = self.client.get('/register_business/Bloomy')
+            self.assert200
+            self.assertIn(b'Business Name', response.data) 
+        
+
     # Test register business functionality
     def test_register_business_functionality(self):
         with self.client:
@@ -113,6 +132,32 @@ class UsersViewsTests(BaseTestCase):
             response = self.client.post('/register_business/Bloomy', 
                         data=dict(name='testName', category='testCat', description='testDesc', location='Area 51'))
             self.assertIn(b'The business has been successfully registered', response.data)
+
+    # Test search functionality
+    def test_search_functionality(self):
+        with self.client:
+            self.client.post('/login', data=dict(username='Bloomy', password='bloomy')) # log in user
+            response = self.client.get('/search_business', 
+                        data=dict(keyword_type='business_name', keyword='Tala'))
+            self.assert200
+            self.assertIn(b'No results found', response.data)
+
+
+class BusinessesReviewsTests(BaseTestCase):
+
+    # Test landing page list existing businesses
+    def test_landing_list_existing_business(self):
+        with self.client:
+            response = self.client.post('/login', data=dict(username='Bloomy', password='bloomy'), follow_redirects=True) # log in bloomy
+            # response = self.client.get('/search_business', 
+            #                             data=dict(keyword_type='business_name', keyword='testName1'))
+            self.assert200
+            self.assertIn(b'testName1', response.data)
+            self.assertTrue(b'testName2' in response.data)
+
+
+            
+        
 
 
 if __name__ == '__main__':
