@@ -16,6 +16,6 @@ before_script:
 # command to run tests
 script:
   - coverage run tests.py -v
-  - coverage report --show-missing > .coverage
+  - coverage report --show-missing
 
 after_success: coveralls
