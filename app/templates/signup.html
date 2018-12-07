@@ -54,6 +54,16 @@
         </nav>
     </div>
     <div class="bigdiv">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="alert alert-info">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <div class="middiv">
     <div class="maindiv">
     <h1>Sign up</h1>
@@ -106,16 +116,6 @@
     {%if request.form['password'] != request.form['password2']%}
     <p class="alert alert-warning" role="alert">Passwords do not match!</p>
     {%endif%}
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="alert alert-info">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
     
     </div></div></div>
 
