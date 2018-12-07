@@ -1,11 +1,11 @@
-# import testing.postgresql
-# from sqlalchemy import create_engine
+import os
 
 class BaseConfig(object):
     DEBUG = False
     SECRET_KEY = 'dev'
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:@Alex.ngari03@localhost/andelaapp'
+    DATABASE_DEFAULT = 'postgresql://postgres:@Alex.ngari03@localhost/andelaapp'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', DATABASE_DEFAULT)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(BaseConfig):
