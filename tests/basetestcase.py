@@ -27,6 +27,9 @@ class BaseTestCase(TestCase):
         business2 = Business(name='testName2', category='testCat2', desctiption='testDesc2', location='Area 52', user_id=2)
         db.session.add(business2)
         db.session.commit()
+        review = Review(user_id=2, business_id=1, post='testReview1')
+        db.session.add(review)
+        db.session.commit
 
     def tearDown(self):
         db.session.remove()

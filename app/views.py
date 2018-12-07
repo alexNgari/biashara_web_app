@@ -159,12 +159,15 @@ def delete_business():
     business_name = request.form['business_name']
     business = Business.query.filter_by(name=business_name).first()
     if business:
-        db.session.delete(business)
-        db.session.commit()
-        flash('Successfully deleted business')
+        if business.user_id == current_user.id:
+            db.session.delete(business)
+            db.session.commit()
+            flash('Successfully deleted business')
+        else:
+            flash('Get your own business!')
     else:
         flash('Names do not match!')
-    return render_template('business.html', business=None)
+    return render_template('mbusiness.html', business=None)
 
 
 @app.route('/update_business/<string:business_name>', methods = ['GET', 'POST'])
