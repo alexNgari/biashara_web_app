@@ -55,7 +55,10 @@
     </div>
     <div class="bigdiv">
 
-    {% with messages = get_flashed_messages() %}
+    
+    <div class="middiv">
+    <div class="maindiv">
+        {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class="alert alert-info">
                 {% for message in messages %}
@@ -63,9 +66,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
-    {% endwith %}
-    <div class="middiv">
-    <div class="maindiv">
+        {% endwith %}
     <h1>Sign up</h1>
     <form action="/sign_up" method="POST">
         <div class="form-group row">

@@ -34,17 +34,18 @@
         </nav>
     </div>
     <div class="bigdiv">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="alert alert-info">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        
         <div class="middiv">
             <div class="maindiv">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="alert alert-info">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
                 <form action="{{url_for('register_business', username=username)}}" method="POST">
                     <div class="form-group row">
                         <label for="first_name" class="col-sm-2 col-form-label">Business Name</label>
