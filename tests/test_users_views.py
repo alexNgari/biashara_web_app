@@ -72,12 +72,10 @@ class UsersViewsTests(BaseTestCase):
     def test_search_functionality(self):
         with self.client:
             self.client.post('/login', data=dict(username='Bloomy', password='bloomy')) # log in user
-            response = self.client.get('/search_business', 
-                        data=dict(keyword_type='business_name', keyword='Tala'))
+            response = self.client.get('/search_business?keyword_type=business_name&keyword=Tala')
             self.assert200
             self.assertIn(b'No results found', response.data)
-            response = self.client.get('/search_business', 
-                        data=dict(keyword_type='location', keyword='Area51'))
+            response = self.client.get('/search_business?keyword_type=location&keyword=Area+51')
             self.assert200
             self.assertIn(b'testName1', response.data)
 

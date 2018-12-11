@@ -101,9 +101,12 @@ def search_business():
             rows = Business.query.filter_by(name=keyword).all()
         elif keyword_type == 'location':
             rows = Business.query.filter_by(location=keyword).all()
-        else:
+        elif keyword_type == 'category':
             rows = Business.query.filter_by(category=keyword).all()
-            
+        else:
+            flash('Invalid Entry')
+            return render_template('landing.html')
+
         if len(rows) == 0:
             flash('No results found')
             return render_template('landing.html')
