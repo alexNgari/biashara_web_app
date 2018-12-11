@@ -52,7 +52,7 @@ class Business(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Business {}>'.format(self.body)
+        return '<Business {}>'.format(self.name)
 
 
 class Review(db.Model):
@@ -63,4 +63,4 @@ class Review(db.Model):
     pub_date= db.Column(db.DateTime, default=datetime.utcnow())
 
     def __repr__(self):
-        return '<Review {}>'.format(self.body)
+        return '<Review {}>'.format(self.post)

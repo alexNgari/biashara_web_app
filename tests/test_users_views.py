@@ -76,6 +76,10 @@ class UsersViewsTests(BaseTestCase):
                         data=dict(keyword_type='business_name', keyword='Tala'))
             self.assert200
             self.assertIn(b'No results found', response.data)
+            response = self.client.get('/search_business', 
+                        data=dict(keyword_type='location', keyword='Area51'))
+            self.assert200
+            self.assertIn(b'testName1', response.data)
 
 
 

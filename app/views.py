@@ -112,7 +112,7 @@ def search_business():
             names = []
             for row in rows:
                 names.append(row.name)
-            return render_template('landing.html', names=rows)
+            return render_template('landing.html', names=names)
 
 
 
@@ -186,6 +186,20 @@ def update_business(business_name):
         session.pop('_flashes', None)
         business = Business.query.filter_by(name=business_name).first()
         return render_template('update_business.html', business=business)
+def review_business(business_name):
+    if request.method == 'POST':
+        business = Business.query.filter_by(name=business_name).first()
+        post = request.form['post']
+
+        review = Review(user_id=current_user.id, business_id=business.id, post=post)
+        db.session.add(review)
+        db.session.commit()
+        flash('Review Posted')
+        return render_template('review.html', business=business)
+    else:
+        session.pop('_flashes', None)
+        business = Business.query.filter_by(name=business_name).first()
+        return render_template('review.html', business=business)
 
 
 @app.route('/review/<string:business_name>', methods=['GET', 'POST'])
